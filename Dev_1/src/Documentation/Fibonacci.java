@@ -10,7 +10,7 @@ public class Fibonacci {
 	 * @param x This represents the current position in the Fibonacci sequence
 	 * @param minTwo This represents the number that is two places before the current number
 	 * @param minOne This represents the number that is one place before the current number
-	 * @param curr This represents the number in the current position in the Fibonacci sequence
+	 * @param curr This represents the number in the current position of the Fibonacci sequence
 	 * @return  The Fibonnaci number at the current position in the sequence
 	 */
 	public static int FibIter(int x) {
@@ -36,7 +36,7 @@ public class Fibonacci {
 	}
 	/**
 	 * Compares the two methods to determine the operating speed of each in nanoseconds
-	 * @param args The defazult command line arguements for Java. Unused in this program
+	 * @param args The default command line arguments for Java. Unused in this program
 	 */
 	public static void main(String[] args) {
 		int n = 0;
