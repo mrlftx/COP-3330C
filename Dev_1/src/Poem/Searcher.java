@@ -44,6 +44,7 @@ public class Searcher{
 						adder.setRight(1);
 						wordStore.add(adder);
 					}
+				
 
 		    }
 		} catch (FileNotFoundException e) {
