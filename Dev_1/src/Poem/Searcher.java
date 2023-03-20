@@ -1,16 +1,84 @@
 package Poem;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.nio.file.Path;
-public class Searcher{
+import javafx.animation.*;
+import javafx.scene.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.stage.*;
+import javafx.util.Duration;
+import javafx.application.*;
+import javafx.event.*;
+public class Searcher extends Application  {
 	
-	public static void main(String[] args) {
-		ArrayList<Pair> wordStore = new ArrayList<Pair>();
-		Pair adder = new Pair("", 0);
+	public static ArrayList<Pair> wordStore = new ArrayList<Pair>();
+	public static int i = 19;
+	public static Pair adder = new Pair("", 0);
+	public static String color1 = "#606dbc";
+	public static String color2 = "#465298";
+	public static String temp = "";
+	
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			Pane root = new Pane();
+			root.setStyle("-fx-background-color: linear-gradient(from 0px 0px to 10px 10px, repeat,  "+ color1 + " 50%, " + color2 + " 50%)");
+			Timeline palette = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> {
+				temp = color1;
+				color1 = color2;
+				color2 = temp;
+				root.setStyle("-fx-background-color: linear-gradient(from 0px 0px to 10px 10px, repeat,  "+ color1 + " 50%, " + color2 + " 50%)");
+			}));
+			palette.setCycleCount(Timeline.INDEFINITE);
+			palette.play();
+			Scene scene = new Scene(root, 400, 450);
+			Rectangle rect = new Rectangle(380, 430, Color.ALICEBLUE);
+			rect.setLayoutX(10);
+			rect.setLayoutY(10);
+			Text title = new Text(30, 35, "What are the 20 most reoccurring words in \n\t\t\t\"The Raven\"?");
+			title.setStyle("-fx-font-size: 18;");
+			title.wrappingWidthProperty().bind(scene.widthProperty());
+			Button press = new Button("Click here to find out!");
+			press.setLayoutX(135);
+			press.setLayoutY(235);
+			Label words = new Label();
+			words.setLayoutX(150);
+			words.setLayoutY(80);
+			words.setStyle("-fx-font-weight: bold;");
+			root.getChildren().addAll(rect, title, press, words);
+			primaryStage.setScene(scene);
+			primaryStage.show();
+			Timeline cycle = new Timeline(new KeyFrame(Duration.seconds(0.3), event -> {
+				adder = wordStore.get(i);
+				words.setText((i+1)+ ". " + adder.getLeft() + " (" + adder.getRight() + " times)\n" + words.getText());
+				i--;
+			}));
+			cycle.setCycleCount(20);
+			EventHandler<ActionEvent> display = new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					Button source = (Button) arg0.getSource();
+					source.setVisible(false);
+					cycle.play();
+				}
+			};
+			press.setOnAction(display);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	public static void main(String[] args) {
 		String holder = new String();
 		holder.equalsIgnoreCase(holder);
 
@@ -51,10 +119,11 @@ public class Searcher{
 			e.printStackTrace();
 		}
 		Collections.sort(wordStore, Comparator.comparing(pair -> -pair.getRight()));
-		for(int i = 0; i < wordStore.size(); i++) {
+		/*for(int i = 0; i < 20; i++) {
 			adder = wordStore.get(i);
 			System.out.println(adder.getLeft() + " " + adder.getRight());
 		}
-		System.out.println(wordStore.size());
+		System.out.println(wordStore.size());*/
+		launch(args);
 	}
 }
