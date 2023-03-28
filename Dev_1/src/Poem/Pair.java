@@ -22,14 +22,14 @@ public class Pair {
 
 	/*@Override
 	public int hashCode() { return left.hashCode() ^ right.hashCode(); }
-
+	*/
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Pair)) return false;
 	    Pair pairo = (Pair) o;
 	    return this.left.equals(pairo.getLeft()) &&
 	           this.right.equals(pairo.getRight());
-	}*/
+	}
 	  
 	public boolean leftEquals(String s) {
 		//return this.left.equalsignorecase(s);
