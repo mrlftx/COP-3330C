@@ -1,5 +1,9 @@
 package Poem;
-
+/**
+ * 
+ * @author Luiz Felipe Tafner
+ *
+ */
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
@@ -8,7 +12,9 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 class SearchTest {
-
+	/**
+	 * Test to see if method to count and sort text functions correctly
+	 */
 	@Test
 	void test() {
 		Searcher search = new Searcher();

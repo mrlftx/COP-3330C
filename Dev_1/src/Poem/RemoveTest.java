@@ -1,5 +1,9 @@
 package Poem;
-
+/**
+ * 
+ * @author Luiz Felipe Tafner
+ *
+ */
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
@@ -12,7 +16,9 @@ import java.util.Scanner;
 import org.junit.jupiter.api.Test;
 
 class RemoveTest {
-
+	/**
+	 * Test to see if method to remove html tags functions correctly
+	 */
 	@Test
 	void test() {
 		Remover remove = new Remover();

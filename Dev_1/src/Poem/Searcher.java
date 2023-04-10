@@ -1,5 +1,9 @@
 package Poem;
-
+/**
+ * 
+ * @author Luiz Felipe Tafner
+ *
+ */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,7 +31,13 @@ public class Searcher extends Application  {
 	public static String color2 = "#465298";
 	public static String temp = "";
 	
-	
+	/**
+	 * Method to count the number of words in a text, then sort them in descending order from highest to lowest
+	 * @param outname The name of the output file
+	 * @param pathname The filepath to the text that will be word counted
+	 * @param txtstart Where in the text to start (i.e. all text before will be discarded)
+	 * @param txtend Where in the text to end (i.e. all text after will be discarded)
+	 */
 	public static void countNSort(String outname, String pathname, String txtstart, String txtend) {
 		String holder = new String();
 		holder.equalsIgnoreCase(holder);
@@ -47,7 +57,7 @@ public class Searcher extends Application  {
 			while(sc.hasNext()){
 				isIn = false;
 				holder = sc.next();
-				holder = holder.replaceAll("[,.!?;—$\"“”‘’]", "");
+				holder = holder.replaceAll("[,.!?;—$\"]", "");
 				adder = new Pair("", 0);
 				adder.setLeft(holder);
 					for(int i = 0; i < wordStore.size(); i++) {
@@ -71,6 +81,9 @@ public class Searcher extends Application  {
 		Collections.sort(wordStore, Comparator.comparing(pair -> -pair.getRight()));
 	}
 	
+	/**
+	 * The method that creates the java fx graphics
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 		try {
