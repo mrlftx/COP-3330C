@@ -11,6 +11,7 @@ module Dev_1 {
 	requires javafx.fxml;
 	requires javafx.base;
 	requires org.junit.jupiter.api;
+	requires java.sql;
 	
 	
 	opens Poem to javafx.graphics, javafx.fxml;

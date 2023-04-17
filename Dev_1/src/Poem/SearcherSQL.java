@@ -22,14 +22,23 @@ import javafx.stage.*;
 import javafx.util.Duration;
 import javafx.application.*;
 import javafx.event.*;
-public class Searcher extends Application  {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class SearcherSQL extends Application  {
 	
-	public static ArrayList<Pair> wordStore = new ArrayList<Pair>();
 	public static int i = 19;
 	public static Pair adder = new Pair("", 0);
 	public static String color1 = "#606dbc";
 	public static String color2 = "#465298";
 	public static String temp = "";
+	public static Connection conn;
+	public static Statement statement;
+	public static ResultSet result;
 	
 	/**
 	 * Method to count the number of words in a text, then sort them in descending order from highest to lowest
@@ -41,7 +50,19 @@ public class Searcher extends Application  {
 	public static void countNSort(String outname, String pathname, String txtstart, String txtend) {
 		String holder = new String();
 		holder.equalsIgnoreCase(holder);
-
+		String sqlHolder = new String();
+		String url = "jdbc:mysql://localhost:3306/word_occurrences?autoReconnect=true&useSSL=false";//Change to user's localhost
+		String uname = "root";
+		String password = "Admin128";
+		try {
+			conn = DriverManager.getConnection(url, uname, password);
+			statement = conn.createStatement();
+			statement.executeUpdate("TRUNCATE words;");//Clear table at start to prevent duplicate entries
+			//conn.commit(); //Only turn on if autocommit is off
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		
 		File file = new File(outname);
 		int store = 0;
 		boolean isIn = false;
@@ -58,27 +79,26 @@ public class Searcher extends Application  {
 				isIn = false;
 				holder = sc.next();
 				holder = holder.replaceAll("[,.!?;—$\\\"“”‘’]", "");
-				adder = new Pair("", 0);
-				adder.setLeft(holder);
-					for(int i = 0; i < wordStore.size(); i++) {
-						if(wordStore.get(i).leftEquals(holder)){
-							store = wordStore.get(i).getRight();
-							store++;
-							wordStore.get(i).setRight(store);
-							isIn= true;
-						}
-					}
-					if(!isIn) {
-						adder.setRight(1);
-						wordStore.add(adder);
-					}
+				
+				try {
+					Statement statement = conn.createStatement();
+					sqlHolder = "insert into words values ('"+ holder +"');";
+					statement.executeUpdate(sqlHolder);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				
 
 		    }
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		Collections.sort(wordStore, Comparator.comparing(pair -> -pair.getRight()));
+		try {
+			Statement statement = conn.createStatement();
+			result = statement.executeQuery("select * from (select word, count(*) as c FROM words GROUP BY word order by c desc limit 20) t order by c asc;");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -115,8 +135,13 @@ public class Searcher extends Application  {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			Timeline cycle = new Timeline(new KeyFrame(Duration.seconds(0.3), event -> {
-				adder = wordStore.get(i);
-				words.setText((i+1)+ ". " + adder.getLeft() + " (" + adder.getRight() + " times)\n" + words.getText());
+				try {
+					if(result.next()){
+					words.setText((i+1)+ ". " + result.getString(1) + " (" + result.getInt(2) + " times)\n" + words.getText());
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				i--;
 			}));
 			cycle.setCycleCount(20);
