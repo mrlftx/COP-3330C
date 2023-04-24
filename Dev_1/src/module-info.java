@@ -15,5 +15,8 @@ module Dev_1 {
 	
 	
 	opens Poem to javafx.graphics, javafx.fxml;
-	exports Poem;
+	exports Poem to javafx.graphics;
+	opens Example to javafx.graphics, javafx.fxml;
+	exports Example to javafx.graphics;
+
 }
